@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :pageName="$post->title">
     <div class="container py-md-5 container--narrow">
         <form action="/posts/edit/{{$post->id}}" method="POST">
             @method('PUT')

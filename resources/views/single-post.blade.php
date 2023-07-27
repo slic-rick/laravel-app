@@ -1,4 +1,4 @@
-<x-layout>
+<x-layout :pageName="$post->title">
     <!-- header ends here -->
 
     <div class="container py-md-5 container--narrow">
@@ -17,8 +17,8 @@
       </div>
 
       <p class="text-muted small mb-4">
-        <a href="#"><img class="avatar-tiny" src="/{{$post -> user -> avatar}}" /></a>
-        Posted by <a href="#">{{$post->user->name}}</a> {{$post->created_at->format('n/j/y')}}
+        <a href="/profile/{{$post -> user-> name}}"><img class="avatar-tiny" src="/{{$post -> user -> avatar}}" /></a>
+        Posted by <a href="/profile/{{$post -> user-> name}}">{{$post->user->name}}</a> {{$post->created_at->format('n/j/y')}}
       </p>
 
       <div class="body-content">

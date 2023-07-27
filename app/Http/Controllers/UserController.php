@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use App\Models\User;
+use App\Models\Follow;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\View;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -46,7 +48,7 @@ class UserController extends Controller
 
     public function showPage(Request $request ){
         if (auth() -> check()) {
-            return view('homepage-feed');
+            return view('homepage-feed',['posts' => auth() -> user() -> feedPosts() -> latest() -> paginate(4)]);
         } else {
             return view('homepage');
         }
@@ -54,13 +56,49 @@ class UserController extends Controller
     }
 
     public function profile(User $user){
-
-         $posts = $user->posts() -> latest() -> get();
-         //return $posts;
-
-        return view('profile-page',['name' => $user -> name, 'posts' => $posts,'count' => $posts ->count(), 'avatar' => $user -> avatar]);
+         
+        // Then we are following the $user.
+        $this -> sharedData($user);
+        
+        $posts = $user->posts() -> latest() -> get();
+        return view('profile-page',['posts' => $posts]);
 
         
+    }
+
+    public function profileFollowers(User $user){
+
+        $this -> sharedData($user);
+
+
+        $followers = $user->followers() -> latest() -> get();
+       return view('profile-followers',[ 'followers' => $followers]);
+
+       
+   }
+
+   public function profileFollowing(User $user)
+   {
+    $this -> sharedData($user);
+    $following = $user->following() -> latest() -> get();
+
+    return view('profile-following',[ 'following' => $following]);
+   
+    }
+
+
+
+    private function sharedData($user){
+
+        $isFollowing = 0;
+
+        if(auth() -> check()){
+            $isFollowing = Follow::where([['user_id', '=', auth() -> user() -> id],['followedUser','=',$user -> id]]) -> count();
+        }
+
+        View::share('sharedData',['isFollowing' => $isFollowing,'name' => $user -> name,'count' => $user -> posts() ->count(), 'avatar' => $user -> avatar, 'followersCount' => $user->followers->count(), 'followingCount' => $user->following->count()]);
+
+
     }
 
     public function logout(Request $request){
