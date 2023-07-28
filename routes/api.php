@@ -23,3 +23,4 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::post('/login',[UserController::class,'loginApi']);
 
 Route::post('/create-post',[PostController::class,'createPostApi']) -> middleware('auth:sanctum');
+Route::delete('/delete-post/{post}',[PostController::class,'deletePostApi']) -> middleware('auth:sanctum','can:delete,post');

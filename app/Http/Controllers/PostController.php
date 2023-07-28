@@ -55,6 +55,15 @@ class PostController extends Controller
         return redirect('/profile/'.auth() -> user() -> name) -> with('success','You successfully deleted the post!');
     }
 
+    function deletePostApi(Post $post){
+        // if(!$post -> id === auth() -> user() -> id){
+        //     return 'You can not delete this post!!';
+        // }
+
+        $post -> delete();
+
+        return "Post {$post->id} deleted";
+    }
     public function showSinglePost(Post $post){
         $markdown = Str::markdown($post-> body);
         $post['body'] = $markdown;
