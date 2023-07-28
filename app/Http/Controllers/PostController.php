@@ -14,6 +14,13 @@ class PostController extends Controller
 
     }
 
+    function search($term) {
+        $posts  = Post::search($term) -> get();
+        $posts-> load('user:id,name,avatar');
+        return $posts;
+        
+    }
+
     function showUpdatePost(Post $post) {
         return view('edit-post',['post' => $post]);
         

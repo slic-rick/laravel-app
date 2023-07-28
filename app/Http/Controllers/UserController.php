@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\User;
 use App\Models\Follow;
+use App\Events\ExampleEvent;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\View;
@@ -66,6 +67,12 @@ class UserController extends Controller
         
     }
 
+
+
+    public function profileRaw(User $user) {
+        return response()->json(['theHTML' => view('profile-posts-only', ['posts' => $user->posts()->latest()->get()])->render(), 'pageName' => $user->name . "'s Profile"]);
+    }
+
     public function profileFollowers(User $user){
 
         $this -> sharedData($user);
@@ -77,6 +84,11 @@ class UserController extends Controller
        
    }
 
+   public function profileFollowersRaw(User $user){
+    return response()->json(['theHTML' => view('profile-followers-only', ['followers' => $user->followers()->latest()->get()])->render(), 'pageName' => $user->name . "'s Followers"]);
+
+}
+
    public function profileFollowing(User $user)
    {
     $this -> sharedData($user);
@@ -85,6 +97,12 @@ class UserController extends Controller
     return view('profile-following',[ 'following' => $following]);
    
     }
+
+    public function profileFollowingRaw(User $user)
+    {
+        return response()->json(['theHTML' => view('profile-following-only', ['following' => $user->following()->latest()->get()])->render(), 'pageName' => $user->name . "'s Following"]);
+
+     }
 
 
 
@@ -102,6 +120,7 @@ class UserController extends Controller
     }
 
     public function logout(Request $request){
+        event(new ExampleEvent(['name' => auth() -> user() -> name, 'action' => 'Logout']));
         auth()->logout();
         return redirect('/') -> with('logout','logged out successfully');
 
@@ -116,15 +135,16 @@ class UserController extends Controller
 
         if (auth() -> attempt(['name' => $login['loginusername'], 'password' => $login['loginpassword']])) {
             $request ->session() -> regenerate();
+            event(new ExampleEvent(['name' => auth() -> user() -> name, 'action' => 'Login']));
             return redirect('') -> with('success','Logged in successfully !!');
             
         } else {
             # code...
             return redirect('') -> with('failure','Please enter the right login details!!');
         }
-        
-
     }
+
+
     public function registerUser (Request $request){
 
         $getUser = $request -> validate([
