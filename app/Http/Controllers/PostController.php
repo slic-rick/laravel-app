@@ -3,8 +3,11 @@
 namespace App\Http\Controllers;
 
 use App\Models\Post;
+use App\Mail\NewPostEmail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
+use App\Jobs\SendNewPostEmail;
+use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
 {
@@ -67,10 +70,28 @@ class PostController extends Controller
         $validate_post['title'] = strip_tags($validate_post['title']);
         $validate_post['body'] = strip_tags($validate_post['body']);
         $validate_post['user_id'] = auth() -> id();
-        
-        Post::create($validate_post);
 
-        return 'created blog post';
+        dispatch(new SendNewPostEmail( ['email' => auth() -> user() -> email,'name' => auth() -> user() -> name,'title' => $validate_post['title'] ] ));
+        
+        $newPost = Post::create($validate_post);
+
+        return redirect("/posts/{$newPost -> id}") -> with('success','New Post successfully created!');
+
+    }
+
+    public function createPostApi(Request $request){
+        $validate_post = $request -> validate([
+            'title' => ['required','min:4','max:250'],
+            'body' => ['required','min:10']
+        ]);
+        
+        $validate_post['title'] = strip_tags($validate_post['title']);
+        $validate_post['body'] = strip_tags($validate_post['body']);
+        $validate_post['user_id'] = auth() -> id();
+        
+        $newPost = Post::create($validate_post);
+
+        return $newPost -> id;
 
     }
 }

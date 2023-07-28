@@ -2,12 +2,14 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Post;
 use App\Models\User;
 use App\Models\Follow;
 use App\Events\ExampleEvent;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\Support\Facades\View;
+use Illuminate\Support\Facades\Cache;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
 
@@ -47,11 +49,35 @@ class UserController extends Controller
 
     }
 
+    public function loginApi(Request $request) {
+
+        $validateData = $request -> validate([
+            'name' => 'required',
+            'password' => 'required'
+        ]);
+
+        if (auth() -> attempt($validateData)) {
+            // return token
+            $user = User::where('name',$validateData['name']) -> first();
+
+            return $user -> createToken('userToken') -> plainTextToken;
+        }
+
+        return 'Wrong login credintials!';
+        
+    }
+
     public function showPage(Request $request ){
         if (auth() -> check()) {
             return view('homepage-feed',['posts' => auth() -> user() -> feedPosts() -> latest() -> paginate(4)]);
         } else {
-            return view('homepage');
+
+            $postCount = Cache::remember('postCount',20,function (){
+                //sleep(5);
+                return Post::count();
+            });
+
+            return view('homepage',['postCount' => $postCount]);
         }
         
     }
