@@ -93,6 +93,10 @@ class UserController extends Controller
         
     }
 
+    function showAboutPage(Request $request){
+       return view('about'); 
+    }
+
 
 
     public function profileRaw(User $user) {

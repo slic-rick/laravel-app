@@ -4,6 +4,29 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+
+
+            <!-- Bootstrap v4.4.1 css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/bootstrap.min.css">
+            <!-- font-awesome css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/font-awesome.min.css">
+            <!-- animate css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/animate.css">
+            <!-- off canvas css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/off-canvas.css">
+            <!-- linea-font css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/linea-fonts.css">
+            <!-- flaticon css  -->
+            <link rel="stylesheet" type="text/css" href="resources/css/flaticon.css">
+            <!-- magnific popup css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/magnific-popup.css">
+            <!-- Main Menu css -->
+            <link rel="stylesheet" href="resources/css/rsmenu-main.css">
+            <!-- spacing css -->
+            <link rel="stylesheet" type="text/css" href="resources/css/rs-spacing.css">
+            <link rel="stylesheet" type="text/css" href="resources/css/responsive.css">
+
+
     <title>@isset($pageName)
       {{$pageName}} | Erik_codes
       @else
@@ -95,5 +118,26 @@
     <script>
       $('[data-toggle="tooltip"]').tooltip()
     </script>
+    
+
+        <!-- modernizr js -->
+        <script src="resources/js/modernizr-2.8.3.min.js"></script>
+        <!-- jquery latest version -->
+        <script src="resources/js/jquery.min.js"></script>
+        <!-- Bootstrap v4.4.1 js -->
+        <script src="resources/js/bootstrap.min.js"></script>
+        <!-- magnific popup js -->
+        <script src="resources/js/jquery.magnific-popup.min.js"></script>
+        <!-- Menu js -->
+        <script src="resources/js/rsmenu-main.js"></script> 
+        <!-- wow js -->
+        <script src="resources/js/wow.min.js"></script>     
+        <!-- plugins js -->
+        <script src="resources/js/plugins.js"></script>
+        <!-- contact form js -->
+        <script src="resources/js/contact.form.js"></script>
+        <!-- main js -->
+        <script src="resources/js/main.js"></script>
   </body>
+  
 </html>

@@ -35,6 +35,8 @@ Route:: get('/profile/{user:name}',[UserController::class,'profile']);
 Route:: get('/profile/{user:name}/followers',[UserController::class,'profileFollowers']);
 Route:: get('/profile/{user:name}/following',[UserController::class,'profileFollowing']);
 
+Route::get('/about',[UserController::class,'showAboutPage']);
+
 // Profile Routes
 // Route::middleware('cache.group:public;max_age=20;etag') -> group(function (){
     
