@@ -7,6 +7,7 @@ use App\Mail\NewPostEmail;
 use Illuminate\Support\Str;
 use Illuminate\Http\Request;
 use App\Jobs\SendNewPostEmail;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Mail;
 
 class PostController extends Controller
@@ -76,11 +77,18 @@ class PostController extends Controller
             'body' => ['required','min:10']
         ]);
         
+        $category = $request -> input('category');
+
+        Log::debug("The Selected category is: {$category }");
+
         $validate_post['title'] = strip_tags($validate_post['title']);
         $validate_post['body'] = strip_tags($validate_post['body']);
         $validate_post['user_id'] = auth() -> id();
+        $validate_post['category'] = $category;
 
-        dispatch(new SendNewPostEmail( ['email' => auth() -> user() -> email,'name' => auth() -> user() -> name,'title' => $validate_post['title'] ] ));
+        Log::debug($validate_post);
+
+        //dispatch(new SendNewPostEmail( ['email' => auth() -> user() -> email,'name' => auth() -> user() -> name,'title' => $validate_post['title'] ] ));
         
         $newPost = Post::create($validate_post);
 

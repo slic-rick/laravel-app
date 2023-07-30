@@ -82,28 +82,11 @@ class UserController extends Controller
         
     }
 
-    public function profile(User $user){
-         
-        // Then we are following the $user.
-        $this -> sharedData($user);
-        
-        $posts = $user->posts() -> latest() -> get();
-        return view('profile-page',['posts' => $posts]);
-
-        
-    }
-
     function showAboutPage(Request $request){
        return view('about'); 
-    }
-
-
-
-    public function profileRaw(User $user) {
-        return response()->json(['theHTML' => view('profile-posts-only', ['posts' => $user->posts()->latest()->get()])->render(), 'pageName' => $user->name . "'s Profile"]);
-    }
-
-    public function profileFollowers(User $user){
+    }  
+    
+     public function profileFollowers(User $user){
 
         $this -> sharedData($user);
 
@@ -117,7 +100,67 @@ class UserController extends Controller
    public function profileFollowersRaw(User $user){
     return response()->json(['theHTML' => view('profile-followers-only', ['followers' => $user->followers()->latest()->get()])->render(), 'pageName' => $user->name . "'s Followers"]);
 
+    }
+
+public function blogPosts(){
+         
+    // Then we are following the $user.
+    // $this -> sharedData($user);
+    $posts = Post::where('category', '=', 'Web') -> latest()-> get();
+    // $posts = $user->posts() -> latest() -> get();
+    
+   return  view('blog-page',['posts' => $posts]);
+
 }
+
+public function mobileDev() {
+    
+    $posts = Post::where('category','=','') -> latest() -> get();
+    return view('blogs-mobile',['posts' => $posts]);
+    
+}
+public function financePosts() {
+    
+    $posts = Post::where('category','=','') -> latest() -> get();
+    return view('blogs-finance',['posts' => $posts]);
+    
+}
+
+public function aiPosts() {
+    $posts = Post::where('category','=','') -> latest() -> get();
+    return view('blogs-ai',['posts' => $posts]);    
+}
+
+public function webRaw() {
+    $posts = Post::where('category', '=', 'Web') -> latest()-> get();
+    // return response() ->json(['theHTML' => ['posts' => $user->posts()->latest()->get()]]);
+     return response()->json(['theHTML' => view('web-posts-only', ['posts' => $posts]) ->render()]);
+ }
+
+ public function mobileRaw(User $user) {
+    $posts = Post::where('category', '=', 'Mobile') -> latest()-> get();
+     // return response() ->json(['theHTML' => ['posts' => $user->posts()->latest()->get()]]);
+      return response()->json(['theHTML' => view('blogs-mobile-only', ['posts' =>  $posts ])->render()]);
+  }
+
+  public function financeRaw() {
+    $posts = Post::where('category', '=', 'Finance') -> latest()-> get();
+    // return response() ->json(['theHTML' => ['posts' => $user->posts()->latest()->get()]]);
+     return response()->json(['theHTML' => view('blogs-finance-only', ['posts' => $posts ])->render()]);
+ }
+
+ public function aiRaw() {
+    $posts = Post::where('category', '=', 'AI') -> latest()-> get();
+    // return response() ->json(['theHTML' => ['posts' => $user->posts()->latest()->get()]]);
+     return response()->json(['theHTML' => view('blogs-ai-only', ['posts' => $posts])->render()]);
+ }
+
+ public function redirect() {
+    return redirect('/web-dev');
+ }
+
+
+
 
    public function profileFollowing(User $user)
    {
@@ -133,8 +176,6 @@ class UserController extends Controller
         return response()->json(['theHTML' => view('profile-following-only', ['following' => $user->following()->latest()->get()])->render(), 'pageName' => $user->name . "'s Following"]);
 
      }
-
-
 
     private function sharedData($user){
 

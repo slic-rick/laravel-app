@@ -10,7 +10,7 @@ class Post extends Model
 {
     use HasFactory;
     use Searchable;
-    protected $fillable = ['title','body','user_id'];
+    protected $fillable = ['title','body','user_id','category'];
 
 
     public function toSearchableArray() {

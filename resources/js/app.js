@@ -9,6 +9,7 @@ if (document.querySelector('.header-search-icon')) {
 }
 
 if (document.querySelector('.profile-nav')) {
+    // alert('INiyt')
     new Profile();
 }
 
